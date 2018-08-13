@@ -3,15 +3,17 @@
  */
 import React from "react";
 import ReactDOM from "react-dom";
-import { AppContainer } from "react-hot-loader";
+// import { AppContainer } from "react-hot-loader";
 import app from "./app";
+
+console.log(app);
 
 const render = Component => {
   const rootEl = document.querySelector("#root");
   ReactDOM.render(
-    <AppContainer>
-      <Component />
-    </AppContainer>,
+    // <AppContainer>
+    <Component />,
+    // </AppContainer>,
     rootEl
   );
 };

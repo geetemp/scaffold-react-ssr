@@ -5,7 +5,7 @@ import middlewares from "./middlewares";
 export default function configureStore(preloadedState) {
   const store = createStore(
     createRootReducer(),
-    preloadedState,
+    preloadedState || {},
     compose(
       applyMiddleware(...middlewares),
       process.env.BROWSER

@@ -9,7 +9,7 @@ import configureStore from "redux/store";
 import { history } from "redux/store/syncHistoryWithStore";
 import { ConnectedRouter } from "react-router-redux";
 import { RouteDataLoader } from "utils/hoc/route-data-loader";
-import routesConfig from "routes";
+import routesConfig from "./routes.js";
 
 const store = configureStore(window.__PRELOADED_STATE__);
 
