@@ -3,25 +3,11 @@
  */
 import React from "react";
 import ReactDOM from "react-dom";
-// import { AppContainer } from "react-hot-loader";
-import app from "./app";
-
-console.log(app);
+import TicTacToe from "routes/TicTacToe";
 
 const render = Component => {
   const rootEl = document.querySelector("#root");
-  ReactDOM.render(
-    // <AppContainer>
-    <Component />,
-    // </AppContainer>,
-    rootEl
-  );
+  ReactDOM.render(<Component />, rootEl);
 };
 
-render(app);
-
-if (module.hot) {
-  module.hot.accept("./app", () => {
-    render(require("./app").default);
-  });
-}
+render(TicTacToe);
