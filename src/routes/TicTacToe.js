@@ -23,7 +23,7 @@ export default class TicTacToe extends React.Component {
       stepNumber,
       xIsNext,
       handleClickWithout,
-      dispatch
+      jumpTo
     } = this.props;
     const current = history[stepNumber];
     // eslint-disable-next-line
@@ -33,13 +33,7 @@ export default class TicTacToe extends React.Component {
       const desc = move ? `Go to move #${move}` : "Go to game start";
       return (
         <li key={desc}>
-          <button
-            onClick={() =>
-              dispatch({ type: "ticTacToe/jumpTo", payload: move })
-            }
-          >
-            {desc}
-          </button>
+          <button onClick={() => jumpTo(move)}>{desc}</button>
         </li>
       );
     });

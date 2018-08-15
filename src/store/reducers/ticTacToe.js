@@ -19,7 +19,7 @@ const ticTacToe = new class extends Model {
         setTimeout(() => {
           this.dispatch({ type: "ticTacToe/handleClick", payload: index });
           resolve("complete");
-        }, 5000);
+        }, 1000);
       });
     }
   };
