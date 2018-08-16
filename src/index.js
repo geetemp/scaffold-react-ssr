@@ -5,8 +5,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import configureStore from "store";
-import TicTacToe from "routes/TicTacToe";
+import router from "./router";
 import ticTacToeModel from "store/reducers/ticTacToe";
+import "assets/styles/global.scss";
 
 configureStore.pushModel(ticTacToeModel);
 
@@ -20,4 +21,4 @@ const render = Component => {
   );
 };
 
-render(TicTacToe);
+render(router);

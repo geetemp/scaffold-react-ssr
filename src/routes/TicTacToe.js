@@ -1,10 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import Board from "components/board";
 import { connect } from "react-redux";
 import ticTacToeModel from "store/reducers/ticTacToe";
-import "./index.css";
-
-console.log(ticTacToeModel.actions);
+import "./TicTacToe.scss";
 
 @connect(
   ({ ticTacToe }) => {
@@ -16,7 +14,7 @@ console.log(ticTacToeModel.actions);
     ...ticTacToeModel.actions
   }
 )
-export default class TicTacToe extends React.Component {
+export default class TicTacToe extends Component {
   render() {
     const {
       history,
@@ -50,7 +48,11 @@ export default class TicTacToe extends React.Component {
         <div className="game-board">
           <Board
             squares={current.squares}
-            onClick={i => handleClickWithout(i)}
+            onClick={i => {
+              handleClickWithout(i).then(back => {
+                console.log(back);
+              });
+            }}
           />
         </div>
         <div className="game-info">

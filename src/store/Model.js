@@ -4,6 +4,17 @@
 const asyncActionFactry = Symbol("asyncActionFactry");
 
 export default class Model {
+  static getInstance = (function() {
+    let instance;
+    return function(clazz) {
+      if (!instance) {
+        instance = new clazz();
+        instance.createActions();
+      }
+      return instance;
+    };
+  })();
+
   [asyncActionFactry](asyncFunc) {
     return function() {
       const passArgument = Array.prototype.slice.call(arguments);
@@ -15,9 +26,6 @@ export default class Model {
 
   createActions() {
     const { reducers = {}, namespace = "app", actions = {} } = this;
-    console.log("reducers", reducers);
-    console.log("actions", actions);
-    console.log("namespace", namespace);
 
     const normalActions = {};
     Object.keys(reducers).reduce((lastActions, reducerName) => {
