@@ -26,7 +26,6 @@ export default class Model {
 
   createActions() {
     const { reducers = {}, namespace = "app", actions = {} } = this;
-
     const normalActions = {};
     Object.keys(reducers).reduce((lastActions, reducerName) => {
       lastActions[reducerName] = function() {
