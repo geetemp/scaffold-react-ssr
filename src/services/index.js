@@ -22,13 +22,11 @@ const xhr = ({ url, body = null, method = "get" }) => {
 
   let param = {
     method: method,
-    headers: {
-      "Content-Type": "application/json"
-    }
+    headers: { "Content-Type": "application/json", Accept: "*/*" }
   };
 
   if (body) {
-    method === ("post" || "POST")
+    method === ("post" || "POST" || "put" || "PUT")
       ? (param.body = JSON.stringify(body))
       : (url = `${url}?${urlEncode(body)}`);
   }
