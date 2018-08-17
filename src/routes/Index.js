@@ -20,8 +20,12 @@ class Index extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <style jsx>{`
-          .App-intro {
-            color: red;
+          @import "~assets/styles/_variable.scss";
+
+          .App {
+            .App-intro {
+              color: red;
+            }
           }
         `}</style>
       </div>
