@@ -1,7 +1,7 @@
 export default {
   namespace: "ticTacToe",
 
-  state = {
+  state: {
     history: [
       {
         squares: Array(9).fill(null)
@@ -9,7 +9,7 @@ export default {
     ],
     stepNumber: 0,
     xIsNext: true
-  }
+  },
 
   reducers: {
     handleClick(state, { payload: index }) {
