@@ -1,48 +1,30 @@
-import React from "react";
+import React, { Component } from "react";
 import Board from "components/board";
-import "./index.css";
+import { connect } from "react-redux";
+import ticTacToeModel from "store/reducers/ticTacToe";
+import "./TicTacToe.scss";
 
-export default class TicTacToe extends React.Component {
-  state = {
-    history: [
-      {
-        squares: Array(9).fill(null)
-      }
-    ],
-    stepNumber: 0,
-    xIsNext: true
-  };
-
-  handleClick = i => {
-    const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const current = history[history.length - 1];
-    const squares = current.squares.slice();
-    // eslint-disable-next-line
-    if (calculateWinner(squares) || squares[i]) {
-      return;
-    }
-    squares[i] = this.state.xIsNext ? "X" : "O";
-    this.setState({
-      history: history.concat([
-        {
-          squares
-        }
-      ]),
-      stepNumber: history.length,
-      xIsNext: !this.state.xIsNext
-    });
-  };
-
-  jumpTo = step => {
-    this.setState({
-      stepNumber: step,
-      xIsNext: step % 2 === 0
-    });
-  };
-
+@connect(
+  ({ ticTacToe }) => {
+    return {
+      ...ticTacToe
+    };
+  },
+  {
+    ...ticTacToeModel.actions
+  }
+)
+export default class TicTacToe extends Component {
   render() {
-    const { history } = this.state;
-    const current = history[this.state.stepNumber];
+    const {
+      history,
+      stepNumber,
+      xIsNext,
+      handleClickWithout,
+      handleClick,
+      jumpTo
+    } = this.props;
+    const current = history[stepNumber];
     // eslint-disable-next-line
     const winner = calculateWinner(current.squares);
 
@@ -50,7 +32,7 @@ export default class TicTacToe extends React.Component {
       const desc = move ? `Go to move #${move}` : "Go to game start";
       return (
         <li key={desc}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button onClick={() => jumpTo(move)}>{desc}</button>
         </li>
       );
     });
@@ -59,13 +41,18 @@ export default class TicTacToe extends React.Component {
     if (winner) {
       status = `Winner: ${winner}`;
     } else {
-      status = `Next player: ${this.state.xIsNext ? "X" : "O"}`;
+      status = `Next player: ${xIsNext ? "X" : "O"}`;
     }
 
     return (
       <div className="game">
         <div className="game-board">
-          <Board squares={current.squares} onClick={i => this.handleClick(i)} />
+          <Board
+            squares={current.squares}
+            onClick={i => {
+              handleClick(i);
+            }}
+          />
         </div>
         <div className="game-info">
           <div>{status}</div>
