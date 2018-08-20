@@ -13,19 +13,11 @@ class Index extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
         <style jsx>{`
-          @import "~assets/styles/_variable.scss";
+          @import "../assets/styles/_variable.scss";
 
-          .App {
-            .App-intro {
-              color: red;
-            }
+          .App-intro {
+            color: $primary-color;
           }
         `}</style>
       </div>

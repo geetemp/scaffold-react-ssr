@@ -21,7 +21,6 @@ export default class TicTacToe extends Component {
       stepNumber,
       xIsNext,
       handleClickWithout,
-      handleClick,
       jumpTo
     } = this.props;
     const current = history[stepNumber];
@@ -50,7 +49,7 @@ export default class TicTacToe extends Component {
           <Board
             squares={current.squares}
             onClick={i => {
-              handleClick(i);
+              handleClickWithout(i);
             }}
           />
         </div>
