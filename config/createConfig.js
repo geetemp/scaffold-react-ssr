@@ -84,7 +84,7 @@ module.exports = (
     mainEslintOptions.baseConfig = {
       extends: [require.resolve("eslint-config-react-app")]
     };
-    // mainEslintOptions.useEslintrc = false;
+    mainEslintOptions.useEslintrc = false;
   }
 
   // Define some useful shorthands.

@@ -3,6 +3,11 @@ import logo from "assets/imgs/logo.svg";
 import "./Index.scss";
 
 class Index extends Component {
+  static async getInitialProps({ req }) {
+    const userAgent = req ? req.headers["user-agent"] : navigator.userAgent;
+    return { userAgent };
+  }
+
   render() {
     return (
       <div className="App">
@@ -11,7 +16,7 @@ class Index extends Component {
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.12
+          To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <style jsx>{`
           @import "../assets/styles/_variable.scss";

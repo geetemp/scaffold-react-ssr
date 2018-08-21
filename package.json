@@ -93,30 +93,8 @@
     ]
   },
   "babel": {
-    "presets": [
-      "react-app"
-    ],
-    "plugins": [
-      "transform-decorators-legacy",
-      [
-        "styled-jsx/babel",
-        {
-          "plugins": [
-            "styled-jsx-plugin-sass"
-          ]
-        }
-      ]
-    ],
-    "env": {
-      "production": {
-        "plugins": [
-          "transform-remove-console"
-        ]
-      }
-    }
   },
   "eslintConfig": {
-    "extends": "react-app"
   },
   "devDependencies": {
     "assets-webpack-plugin": "3.5.1",
