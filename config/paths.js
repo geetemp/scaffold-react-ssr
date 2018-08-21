@@ -25,12 +25,6 @@ function ensureSlash(path, needsSlash) {
 const getPublicUrl = appPackageJson =>
   envPublicUrl || require(appPackageJson).homepage;
 
-// We use `PUBLIC_URL` environment variable or "homepage" field to infer
-// "public path" at which the app is served.
-// Webpack needs to know it to put the right <script> hrefs into HTML even in
-// single-page apps that may serve index.html for nested URLs like /todos/42.
-// We can't use a relative path in HTML because we don't want to load something
-// like /todos/42/static/js/bundle.7289d.js. We have to know the root.
 function getServedPath(appPackageJson) {
   const publicUrl = getPublicUrl(appPackageJson);
   const servedUrl =
@@ -38,18 +32,33 @@ function getServedPath(appPackageJson) {
   return ensureSlash(servedUrl, true);
 }
 
-// config after eject: we're in ./config/
+const resolveOwn = relativePath => path.resolve(__dirname, '..', relativePath);
+
+const nodePaths = (process.env.NODE_PATH || '')
+  .split(process.platform === 'win32' ? ';' : ':')
+  .filter(Boolean)
+  .filter(folder => !path.isAbsolute(folder))
+  .map(resolveApp);
+
 module.exports = {
   dotenv: resolveApp('.env'),
+  appPath: resolveApp('.'),
   appBuild: resolveApp('build'),
+  appBuildPublic: resolveApp('build/public'),
+  appManifest: resolveApp('build/assets.json'),
   appPublic: resolveApp('public'),
-  appHtml: resolveApp('public/index.html'),
-  appIndexJs: resolveApp('src/index.js'),
-  appPackageJson: resolveApp('package.json'),
-  appSrc: resolveApp('src'),
-  yarnLockFile: resolveApp('yarn.lock'),
-  testsSetup: resolveApp('src/setupTests.js'),
   appNodeModules: resolveApp('node_modules'),
+  appSrc: resolveApp('src'),
+  appPackageJson: resolveApp('package.json'),
+  appServerIndexJs: resolveApp('src'),
+  appClientIndexJs: resolveApp('src/client'),
+  testsSetup: resolveApp('src/setupTests.js'),
+  appBabelRc: resolveApp('.babelrc'),
+  appEslintRc: resolveApp('.eslintrc'),
+  appRazzleConfig: resolveApp('razzle.config.js'),
+  nodePaths: nodePaths,
+  ownPath: resolveOwn('.'),
+  ownNodeModules: resolveOwn('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
   servedPath: getServedPath(resolveApp('package.json')),
 };
