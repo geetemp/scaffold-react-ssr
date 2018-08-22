@@ -1,13 +1,9 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import logo from "assets/imgs/logo.svg";
 import "./Index.scss";
 
 class Index extends Component {
-  static async getInitialProps({ req }) {
-    const userAgent = req ? req.headers["user-agent"] : navigator.userAgent;
-    return { userAgent };
-  }
-
   render() {
     return (
       <div className="App">
@@ -18,6 +14,7 @@ class Index extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
+        <Link to="/tictactoe">来把XO旗！</Link>
         <style jsx>{`
           @import "../assets/styles/_variable.scss";
 

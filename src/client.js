@@ -1,14 +1,22 @@
-import App from "./App";
+import App, { configureStore, staticRouteConfig } from "./App";
 import React from "react";
+import { Provider } from "react-redux";
 import { hydrate } from "react-dom";
 import { Router } from "react-router";
+import { RouteDataLoader } from "utils/hoc/route-data-loader";
 import createBrowserHistory from "history/createBrowserHistory";
 
+const store = configureStore.createStore(window.__PRELOADED_STATE__);
 const history = new createBrowserHistory();
+
 hydrate(
-  <Router history={history}>
-    <App />
-  </Router>,
+  <Provider store={store}>
+    <Router history={history}>
+      <RouteDataLoader routes={staticRouteConfig} store={store}>
+        <App />
+      </RouteDataLoader>
+    </Router>
+  </Provider>,
   document.getElementById("root")
 );
 

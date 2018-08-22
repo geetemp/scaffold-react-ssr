@@ -5,16 +5,20 @@ import ticTacToeModel from "store/reducers/ticTacToe";
 import "./TicTacToe.scss";
 
 @connect(
-  ({ ticTacToe }) => {
-    return {
-      ...ticTacToe
-    };
+  ({ TicTacToe }) => {
+    return { ...TicTacToe };
   },
   {
     ...ticTacToeModel.actions
   }
 )
 export default class TicTacToe extends Component {
+  static nameSpace = "TicTacToe";
+
+  static async getInitialProps() {
+    return { history: [{ squares: Array(9).fill("X", 7, 9) }] };
+  }
+
   render() {
     const {
       history,

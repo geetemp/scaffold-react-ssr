@@ -2,7 +2,7 @@ import Model from "../Model";
 
 export default Model.getInstance(
   class extends Model {
-    namespace = "ticTacToe";
+    namespace = "TicTacToe";
 
     state = {
       history: [
@@ -18,7 +18,10 @@ export default Model.getInstance(
       async handleClickWithout(index) {
         return await new Promise((resolve, reject) => {
           setTimeout(() => {
-            this.dispatch({ type: "ticTacToe/handleClick", payload: index });
+            this.dispatch({
+              type: "TicTacToe/handleClick",
+              payload: index
+            });
             resolve("complete");
           }, 1000);
         });

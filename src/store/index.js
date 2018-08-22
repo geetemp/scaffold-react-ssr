@@ -25,6 +25,14 @@ const configureStore = new function ConfigureStore() {
         return lastRenameReducers;
       }, renameReducers);
 
+      //page init data reduce on client for ssr
+      renameReducers[`${namespace}/@init`] = function(
+        state,
+        { payload: initData }
+      ) {
+        return { ...state, ...initData };
+      };
+
       reducerMap[namespace] = createReducer(state, renameReducers);
     },
 
@@ -34,7 +42,7 @@ const configureStore = new function ConfigureStore() {
         preloadedState,
         compose(
           applyMiddleware(thunk),
-          process.env.BROWSER
+          process.env.BUILD_TARGET === "client"
             ? window.devToolsExtension
               ? window.devToolsExtension()
               : f => f

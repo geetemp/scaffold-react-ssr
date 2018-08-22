@@ -1,28 +1,58 @@
-import App from "./App";
+import App, { configureStore, staticRouteConfig } from "./App";
 import React from "react";
 import { StaticRouter } from "react-router-dom";
 import express from "express";
+import { Provider } from "react-redux";
+import { matchRoutes } from "react-router-config";
 import { renderToString } from "react-dom/server";
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
+
+// console.log(staticRouteConfig());
+const emptyState = configureStore.createStore().getState();
 
 const server = express();
 server
   .disable("x-powered-by")
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
   .get("/*", (req, res) => {
-    const context = {};
-    const markup = renderToString(
-      <StaticRouter context={context} location={req.url}>
-        <App />
-      </StaticRouter>
-    );
+    const { url } = req;
+    const branch = matchRoutes(staticRouteConfig, url);
+    const promises = branch.map(({ route, match }) => {
+      const { component } = route;
+      return component.getInitialProps
+        ? component.getInitialProps().then(res => {
+            return { pageSpace: component.nameSpace || component.name, res };
+          })
+        : Promise.resolve(null);
+    });
 
-    if (context.url) {
-      res.redirect(context.url);
-    } else {
-      res.status(200).send(
-        `<!doctype html>
+    Promise.all(promises).then(initPageDatas => {
+      const initState = JSON.parse(JSON.stringify(emptyState));
+      for (const initPageData of initPageDatas) {
+        if (initPageData) {
+          const { pageSpace } = initPageData,
+            pageState = initState[pageSpace];
+          initState[pageSpace] = { ...pageState, ...initPageData.res };
+        }
+      }
+      render(configureStore.createStore(initState));
+    });
+
+    function render(store) {
+      const context = {};
+      const markup = renderToString(
+        <Provider store={store}>
+          <StaticRouter context={context} location={url}>
+            <App />
+          </StaticRouter>
+        </Provider>
+      );
+
+      if (context.url) {
+        res.redirect(context.url);
+      } else {
+        res.status(200).send(`<!doctype html>
           <html lang="">
             <head>
               <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -34,19 +64,24 @@ server
                   ? `<link rel="stylesheet" href="${assets.client.css}">`
                   : ""
               }
-              ${
-                process.env.NODE_ENV === "production"
-                  ? `<script src="${assets.client.js}" defer></script>`
-                  : `<script src="${
-                      assets.client.js
-                    }" defer crossorigin></script>`
-              }
             </head>
             <body>
                 <div id="root">${markup}</div>
+                ${`<script>
+                window.__PRELOADED_STATE__ = ${JSON.stringify(
+                  store.getState()
+                ).replace(/</g, "\\u003c")}
+              </script>`}
+                ${
+                  process.env.NODE_ENV === "production"
+                    ? `<script src="${assets.client.js}" defer></script>`
+                    : `<script src="${
+                        assets.client.js
+                      }" defer crossorigin></script>`
+                }
             </body>
-          </html>`
-      );
+          </html>`);
+      }
     }
   });
 
