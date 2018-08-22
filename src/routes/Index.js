@@ -14,11 +14,22 @@ class Index extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <Link to="/tictactoe">来把XO旗！</Link>
+        <a className="cs">来吧</a>
+        <Link to="/tictactoe" className="go-tic">
+          来把XO旗！
+        </Link>
         <style jsx>{`
           @import "../assets/styles/_variable.scss";
 
           .App-intro {
+            color: $primary-color;
+          }
+
+          .go-tic {
+            color: $primary-color;
+          }
+
+          .cs {
             color: $primary-color;
           }
         `}</style>
