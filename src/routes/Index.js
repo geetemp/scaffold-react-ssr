@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import logo from "assets/imgs/logo.svg";
 import "./Index.scss";
 
@@ -13,10 +14,29 @@ class Index extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
+        <a className="cs">来吧</a>
+        <div>
+          <Link to="/tictactoe" className="go-tic">
+            来把XO旗！
+          </Link>
+        </div>
+        <div>
+          <Link to="/tictactoe/1" className="go-tic">
+            来把XO旗！+ 子路由
+          </Link>
+        </div>
         <style jsx>{`
           @import "../assets/styles/_variable.scss";
 
           .App-intro {
+            color: $primary-color;
+          }
+
+          .go-tic {
+            color: $primary-color;
+          }
+
+          .cs {
             color: $primary-color;
           }
         `}</style>

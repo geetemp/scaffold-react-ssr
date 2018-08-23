@@ -1,24 +1,26 @@
-/**
- * Created by common on 2017/7/16.
- */
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import configureStore from "store";
-import router from "./router";
-import ticTacToeModel from "store/reducers/ticTacToe";
-import "assets/styles/global.scss";
+import app from "./server";
+import http from "http";
 
-configureStore.pushModel(ticTacToeModel);
+const server = http.createServer(app);
 
-const render = Component => {
-  const rootEl = document.querySelector("#root");
-  ReactDOM.render(
-    <Provider store={configureStore.createStore()}>
-      <Component />
-    </Provider>,
-    rootEl
-  );
-};
+let currentApp = app;
 
-render(router);
+server.listen(process.env.PORT || 3000, error => {
+  if (error) {
+    console.log(error);
+  }
+
+  console.log("🚀 started");
+});
+
+if (module.hot) {
+  console.log("✅  Server-side HMR Enabled!");
+
+  module.hot.accept("./server", () => {
+    console.log("🔁  HMR Reloading `./server`...");
+    server.removeListener("request", currentApp);
+    const newApp = require("./server").default;
+    server.on("request", newApp);
+    currentApp = newApp;
+  });
+}

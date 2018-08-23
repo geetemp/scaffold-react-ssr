@@ -15,7 +15,20 @@ export const RouteDataLoader = withRouter(
         );
         const { store } = this.props;
         matchedRoutes.forEach(({ route, match }) => {
-          route.loadData ? route.loadData(match, store) : void 0;
+          const { component } = route;
+          component.getInitialProps
+            ? component
+                .getInitialProps({
+                  pathname: match.url,
+                  query: match.params
+                })
+                .then(res => {
+                  store.dispatch({
+                    type: `${component.namespace || component.name}/@init`,
+                    payload: res
+                  });
+                })
+            : void 0;
         });
       }
     }
