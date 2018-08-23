@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Board from "components/board";
+import { renderRoutes } from "react-router-config";
 import { connect } from "react-redux";
 import ticTacToeModel from "store/reducers/ticTacToe";
 import "./TicTacToe.scss";
@@ -13,9 +14,10 @@ import "./TicTacToe.scss";
   }
 )
 export default class TicTacToe extends Component {
-  static nameSpace = "TicTacToe";
+  static namespace = "TicTacToe";
 
-  static async getInitialProps() {
+  // { pathname, query, req, res }
+  static async getInitialProps({ pathname, query, req, res }) {
     return { history: [{ squares: Array(9).fill("X", 7, 9) }] };
   }
 
@@ -25,7 +27,8 @@ export default class TicTacToe extends Component {
       stepNumber,
       xIsNext,
       handleClickWithout,
-      jumpTo
+      jumpTo,
+      route
     } = this.props;
     const current = history[stepNumber];
     // eslint-disable-next-line
@@ -61,6 +64,7 @@ export default class TicTacToe extends Component {
           <div>{status}</div>
           <ol>{moves}</ol>
         </div>
+        <div>{renderRoutes(route.routes)}</div>
       </div>
     );
   }

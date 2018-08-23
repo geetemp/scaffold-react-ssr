@@ -17,12 +17,17 @@ export const RouteDataLoader = withRouter(
         matchedRoutes.forEach(({ route, match }) => {
           const { component } = route;
           component.getInitialProps
-            ? component.getInitialProps().then(res => {
-                store.dispatch({
-                  type: `${component.nameSpace || component.name}/@init`,
-                  payload: res
-                });
-              })
+            ? component
+                .getInitialProps({
+                  pathname: match.url,
+                  query: match.params
+                })
+                .then(res => {
+                  store.dispatch({
+                    type: `${component.namespace || component.name}/@init`,
+                    payload: res
+                  });
+                })
             : void 0;
         });
       }

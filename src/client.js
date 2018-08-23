@@ -1,5 +1,6 @@
-import App, { configureStore, staticRouteConfig } from "./App";
+import App, { configureStore } from "./App";
 import React from "react";
+import { renderRoutes } from "react-router-config";
 import { Provider } from "react-redux";
 import { hydrate } from "react-dom";
 import { Router } from "react-router";
@@ -12,8 +13,8 @@ const history = new createBrowserHistory();
 hydrate(
   <Provider store={store}>
     <Router history={history}>
-      <RouteDataLoader routes={staticRouteConfig} store={store}>
-        <App />
+      <RouteDataLoader routes={App} store={store}>
+        {renderRoutes(App)}
       </RouteDataLoader>
     </Router>
   </Provider>,

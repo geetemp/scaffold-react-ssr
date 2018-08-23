@@ -1,5 +1,6 @@
-import App, { configureStore, staticRouteConfig } from "./App";
+import App, { configureStore } from "./App";
 import React from "react";
+import { renderRoutes } from "react-router-config";
 import { StaticRouter } from "react-router-dom";
 import express from "express";
 import { Provider } from "react-redux";
@@ -8,7 +9,6 @@ import { renderToString } from "react-dom/server";
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
-// console.log(staticRouteConfig());
 const emptyState = configureStore.createStore().getState();
 
 const server = express();
@@ -17,13 +17,23 @@ server
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
   .get("/*", (req, res) => {
     const { url } = req;
-    const branch = matchRoutes(staticRouteConfig, url);
+    const branch = matchRoutes(App, url);
     const promises = branch.map(({ route, match }) => {
       const { component } = route;
       return component.getInitialProps
-        ? component.getInitialProps().then(res => {
-            return { pageSpace: component.nameSpace || component.name, res };
-          })
+        ? component
+            .getInitialProps({
+              pathname: match.url,
+              query: match.params,
+              req,
+              res
+            })
+            .then(res => {
+              return {
+                pageSpace: component.namespace || component.name,
+                res
+              };
+            })
         : Promise.resolve(null);
     });
 
@@ -44,7 +54,7 @@ server
       const markup = renderToString(
         <Provider store={store}>
           <StaticRouter context={context} location={url}>
-            <App />
+            {renderRoutes(App)}
           </StaticRouter>
         </Provider>
       );
