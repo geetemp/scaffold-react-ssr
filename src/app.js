@@ -7,12 +7,13 @@ import TicTacToe from "routes/TicTacToe";
 import TicTacToeChild from "routes/TicTacToeChild";
 import ticTacToeModel from "store/reducers/ticTacToe";
 import ticTacToeChildModel from "store/reducers/ticTacToeChild";
+import staticRoutes from "utils/staticRoutes";
 import "assets/styles/global.scss";
 
 configureStore.pushModel(ticTacToeModel);
 configureStore.pushModel(ticTacToeChildModel);
 
-const Routes = () => (
+const App = () => (
   <Switch>
     <Route path="/" exact component={Index} />
     <Route path="/tictactoe" component={TicTacToe}>
@@ -22,23 +23,5 @@ const Routes = () => (
   </Switch>
 );
 
-const App = [];
-(function getStaticRouteConfig(routesConfig, routes = []) {
-  let { children } = routesConfig.props;
-  children = Array.isArray(children) ? children : [children];
-  for (const child of children) {
-    const { props } = child;
-    const cloneProps = { ...props };
-    if (!props.children) {
-      routes.push(cloneProps);
-    } else {
-      delete cloneProps.children;
-      cloneProps.routes = [];
-      routes.push(cloneProps);
-      return getStaticRouteConfig(child, cloneProps.routes);
-    }
-  }
-})(Routes(), App);
-
-export default App;
+export default staticRoutes(App());
 export { configureStore };

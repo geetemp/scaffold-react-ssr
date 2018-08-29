@@ -16,10 +16,11 @@ import "./TicTacToe.scss";
 export default class TicTacToe extends Component {
   static namespace = "TicTacToe";
 
-  // { pathname, query, req, res }
   static async getInitialProps({ pathname, query, req, res }) {
-    return { history: [{ squares: Array(9).fill("X", 7, 9) }] };
+    // return { history: [{ squares: Array(9).fill("X", 7, 9) }] };
   }
+
+  // componentDidMount() {}
 
   render() {
     const {
