@@ -7,6 +7,8 @@ import "./TicTacToe.scss";
 
 @connect(
   ({ TicTacToe }) => {
+
+    console.log("mapa", TicTacToe)
     return { ...TicTacToe };
   },
   {
@@ -29,12 +31,13 @@ export default class TicTacToe extends Component {
       xIsNext,
       handleClickWithout,
       jumpTo,
+      getHistory,
       route
     } = this.props;
     const current = history[stepNumber];
     // eslint-disable-next-line
     const winner = calculateWinner(current.squares);
-
+    getHistory();
     const moves = history.map((step, move) => {
       const desc = move ? `Go to move #${move}` : "Go to game start";
       return (

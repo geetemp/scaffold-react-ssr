@@ -18,6 +18,7 @@ server
   .get("/*", (req, res) => {
     const { url } = req;
     const branch = matchRoutes(App, url);
+    const context = {};
     const promises = branch.map(({ route, match }) => {
       const { component } = route;
       return component.getInitialProps
@@ -33,6 +34,12 @@ server
                 pageSpace: component.namespace || component.name,
                 res
               };
+            }).catch(res => {
+              if (res.code === 404) {
+                context.url = "/404"
+              } else if (res.code === 500) {
+                context.url = "/500"
+              }
             })
         : Promise.resolve(null);
     });
@@ -50,7 +57,7 @@ server
     });
 
     function render(store) {
-      const context = {};
+      
       const markup = renderToString(
         <Provider store={store}>
           <StaticRouter context={context} location={url}>

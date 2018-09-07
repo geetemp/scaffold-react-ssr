@@ -1,6 +1,34 @@
 import { urlEncode } from "utils/url";
 
+const _ = require("underscore")
+
 const xhr = ({ url, body = null, method = "get" }) => {
+  
+  function transformError(response) {
+    let message = "系统异常，请联系管理员";
+    if (!_.isEmpty(response.data)) {
+      if(_.isObject(response.data)) {
+        message = _.values(response.data)[0]
+      } else if(_.isString(response.data)) {
+        message = response.data;
+      }
+    }
+    return message;
+  }
+
+  function parseRequest(response) {
+    response.transformError = ""; // 
+    if (response.code == 0 || (response.code >= 200 && response.code < 300)) {
+      return response;
+    } else if (response.code == 404) {  // 这里抛出错误方便服务器端也能处理
+      throw response;
+    } else if (response.code == 500) {
+      throw response;
+    } else {
+      response.transformError = transformError(response)
+    }
+  }
+
   function checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
       return response;
@@ -35,7 +63,15 @@ const xhr = ({ url, body = null, method = "get" }) => {
   return fetch(url, param)
     .then(checkStatus)
     .then(parseJSON)
-    .then(log);
+    .then(parseRequest)
+    .then(log)
+    .catch(response => {
+      if (response.code === 404) {
+        // 重定向404
+      } else if (response.code === 500) {
+        // 重定向500
+      }
+    });
 };
 
 export default xhr;

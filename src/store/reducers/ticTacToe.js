@@ -3,7 +3,7 @@ import Model from "../Model";
 export default Model.getInstance(
   class extends Model {
     namespace = "TicTacToe";
-
+    
     state = {
       history: [
         {
@@ -11,7 +11,8 @@ export default Model.getInstance(
         }
       ],
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
+      historySelectText: "",
     };
 
     actions = {
@@ -84,5 +85,7 @@ export default Model.getInstance(
         };
       }
     };
+
+    
   }
 );
