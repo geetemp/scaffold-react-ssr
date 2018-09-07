@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "gee-ui";
 import logo from "assets/imgs/logo.svg";
 import "./Index.scss";
 
@@ -24,6 +25,9 @@ class Index extends Component {
           <Link to="/tictactoe/1" className="go-tic">
             来把XO旗！+ 子路由
           </Link>
+        </div>
+        <div className="components">
+          <Button kind="danger">Danger</Button>
         </div>
         <style jsx>{`
           @import "../assets/styles/_variable.scss";
