@@ -2,6 +2,7 @@ import App, { configureStore, staticRoutes } from "./App";
 import React from "react";
 import { StaticRouter } from "react-router-dom";
 import express from "express";
+import { flushToHTML } from "styled-jsx/server";
 import { Provider } from "react-redux";
 import { matchRoutes } from "react-router-config";
 import { renderToString } from "react-dom/server";
@@ -64,6 +65,7 @@ server
           </StaticRouter>
         </Provider>
       );
+      const styles = flushToHTML();
 
       if (context.url) {
         res.redirect(context.url);
@@ -80,6 +82,7 @@ server
                   ? `<link rel="stylesheet" href="${assets.client.css}">`
                   : ""
               }
+              ${styles}
             </head>
             <body>
                 <div id="root">${markup}</div>
