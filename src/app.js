@@ -1,28 +1,24 @@
 import React from "react";
+import { renderRoutes } from "react-router-config";
 import configureStore from "store";
-import { Switch, Route } from "react-router-dom";
-import NotFoundPage from "routes/404";
-import ErrorPage from "routes/500";
-import Index from "routes/Index";
-import TicTacToe from "routes/TicTacToe";
-import TicTacToeChild from "routes/TicTacToeChild";
+import routes from "routes";
 import ticTacToeModel from "store/reducers/ticTacToe";
 import ticTacToeChildModel from "store/reducers/ticTacToeChild";
-import staticRoutes from "utils/staticRoutes";
+import styles from "assets/styles/global.scss";
+import createStaticRoutes from "utils/createStaticRoutes";
 
 configureStore.pushModel(ticTacToeModel);
 configureStore.pushModel(ticTacToeChildModel);
 
+let staticRoutes = createStaticRoutes(routes());
 const App = () => (
-  <Switch>
-    <Route path="/" exact component={Index} />
-    <Route path="/tictactoe" component={TicTacToe}>
-      <Route path="/tictactoe/:param" component={TicTacToeChild} />
-    </Route>
-    <Route path="/500" component={ErrorPage} />
-    <Route component={NotFoundPage} />
-  </Switch>
+  <React.Fragment>
+    {renderRoutes(staticRoutes)}
+    <style jsx global>
+      {styles}
+    </style>
+  </React.Fragment>
 );
 
-export default staticRoutes(App());
-export { configureStore };
+export default App;
+export { configureStore, staticRoutes };

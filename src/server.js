@@ -1,6 +1,5 @@
-import App, { configureStore } from "./App";
+import App, { configureStore, staticRoutes } from "./App";
 import React from "react";
-import { renderRoutes } from "react-router-config";
 import { StaticRouter } from "react-router-dom";
 import express from "express";
 import { Provider } from "react-redux";
@@ -17,7 +16,7 @@ server
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
   .get("/*", (req, res) => {
     const { url } = req;
-    const branch = matchRoutes(App, url);
+    const branch = matchRoutes(staticRoutes, url);
     const context = {};
     const promises = branch.map(({ route, match }) => {
       const { component } = route;
@@ -34,11 +33,12 @@ server
                 pageSpace: component.namespace || component.name,
                 res
               };
-            }).catch(res => {
+            })
+            .catch(res => {
               if (res.code === 404) {
-                context.url = "/404"
+                context.url = "/404";
               } else if (res.code === 500) {
-                context.url = "/500"
+                context.url = "/500";
               }
             })
         : Promise.resolve(null);
@@ -60,7 +60,7 @@ server
       const markup = renderToString(
         <Provider store={store}>
           <StaticRouter context={context} location={url}>
-            {renderRoutes(App)}
+            <App />
           </StaticRouter>
         </Provider>
       );

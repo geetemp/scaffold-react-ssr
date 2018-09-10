@@ -1,4 +1,4 @@
-export default function staticRoutes(routesConfig, routes = []) {
+export default function createStaticRoutes(routesConfig, routes = []) {
   let { children } = routesConfig.props;
   children = Array.isArray(children) ? children : [children];
   for (const child of children) {
@@ -10,7 +10,7 @@ export default function staticRoutes(routesConfig, routes = []) {
       delete cloneProps.children;
       cloneProps.routes = [];
       routes.push(cloneProps);
-      staticRoutes(child, cloneProps.routes);
+      createStaticRoutes(child, cloneProps.routes);
     }
   }
   return routes;
