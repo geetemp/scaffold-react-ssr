@@ -57,7 +57,6 @@ server
     });
 
     function render(store) {
-      
       const markup = renderToString(
         <Provider store={store}>
           <StaticRouter context={context} location={url}>

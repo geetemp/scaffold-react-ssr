@@ -1,6 +1,8 @@
-@import "normalize";
-@import "variable";
-@import "icons";
+/* @styled-jsx=global */
+
+@import "normalize.scss";
+@import "variable.scss";
+@import "icons.scss";
 
 html,
 body {

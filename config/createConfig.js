@@ -259,7 +259,6 @@ module.exports = (
                     loader: require.resolve("postcss-loader"),
                     options: postCssOptions
                   },
-                  ,
                   { loader: require.resolve("sass-loader") }
                 ]
         }, // Adds support for CSS Modules (https://github.com/css-modules/css-modules)

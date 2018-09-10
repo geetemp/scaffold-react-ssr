@@ -9,7 +9,6 @@ import TicTacToeChild from "routes/TicTacToeChild";
 import ticTacToeModel from "store/reducers/ticTacToe";
 import ticTacToeChildModel from "store/reducers/ticTacToeChild";
 import staticRoutes from "utils/staticRoutes";
-import "assets/styles/global.scss";
 
 configureStore.pushModel(ticTacToeModel);
 configureStore.pushModel(ticTacToeChildModel);

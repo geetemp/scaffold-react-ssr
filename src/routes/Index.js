@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "gee-ui";
 import logo from "assets/imgs/logo.svg";
-import "./Index.scss";
+import styles from "./Index.scss";
 
 class Index extends Component {
   render() {
@@ -29,21 +29,7 @@ class Index extends Component {
         <div className="components">
           <Button kind="danger">Danger</Button>
         </div>
-        <style jsx>{`
-          @import "../assets/styles/_variable.scss";
-
-          .App-intro {
-            color: $primary-color;
-          }
-
-          .go-tic {
-            color: $primary-color;
-          }
-
-          .cs {
-            color: $primary-color;
-          }
-        `}</style>
+        <style jsx>{styles}</style>
       </div>
     );
   }

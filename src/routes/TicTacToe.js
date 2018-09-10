@@ -3,12 +3,10 @@ import Board from "components/board";
 import { renderRoutes } from "react-router-config";
 import { connect } from "react-redux";
 import ticTacToeModel from "store/reducers/ticTacToe";
-import "./TicTacToe.scss";
+import styles from "./TicTacToe.scss";
 
 @connect(
   ({ TicTacToe }) => {
-
-    console.log("mapa", TicTacToe)
     return { ...TicTacToe };
   },
   {
@@ -19,7 +17,7 @@ export default class TicTacToe extends Component {
   static namespace = "TicTacToe";
 
   static async getInitialProps({ pathname, query, req, res }) {
-    // return { history: [{ squares: Array(9).fill("X", 7, 9) }] };
+    return { history: [{ squares: Array(9).fill("X", 7, 9) }] };
   }
 
   // componentDidMount() {}
@@ -31,13 +29,11 @@ export default class TicTacToe extends Component {
       xIsNext,
       handleClickWithout,
       jumpTo,
-      getHistory,
       route
     } = this.props;
     const current = history[stepNumber];
     // eslint-disable-next-line
     const winner = calculateWinner(current.squares);
-    getHistory();
     const moves = history.map((step, move) => {
       const desc = move ? `Go to move #${move}` : "Go to game start";
       return (
@@ -69,6 +65,7 @@ export default class TicTacToe extends Component {
           <ol>{moves}</ol>
         </div>
         <div>{renderRoutes(route.routes)}</div>
+        <style jsx>{styles}</style>
       </div>
     );
   }
