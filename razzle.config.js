@@ -1,6 +1,12 @@
 const autoprefixer = require("autoprefixer");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const paths = require("./config/paths");
+
 module.exports = {
   modify: (config, { target, dev }, webpack) => {
+    const IS_NODE = target === "node",
+      IS_DEV = dev;
+    // styled-jsx webpack plugin config
     const postCssOptions = {
       ident: "postcss", // https://webpack.js.org/guides/migrating/#complex-options
       plugins: () => [
@@ -27,6 +33,49 @@ module.exports = {
         options: { type: "scoped" }
       }
     ];
+
+    config.module.rules.push({
+      test: /\.less$/,
+      exclude: [paths.appBuild],
+      use: IS_NODE // Style-loader does not work in Node.js without some crazy
+        ? // magic. Luckily we just need css-loader.
+          [
+            {
+              loader: require.resolve("css-loader"),
+              options: { importLoaders: 1 }
+            }
+          ]
+        : IS_DEV
+          ? [
+              require.resolve("style-loader"),
+              {
+                loader: require.resolve("css-loader"),
+                options: { importLoaders: 1 }
+              },
+              {
+                loader: require.resolve("postcss-loader"),
+                options: postCssOptions
+              },
+              { loader: require.resolve("less-loader") }
+            ]
+          : [
+              MiniCssExtractPlugin.loader,
+              {
+                loader: require.resolve("css-loader"),
+                options: {
+                  importLoaders: 1,
+                  modules: false,
+                  minimize: true
+                }
+              },
+              {
+                loader: require.resolve("postcss-loader"),
+                options: postCssOptions
+              },
+              { loader: require.resolve("less-loader") }
+            ]
+    });
+
     return config;
   }
 };

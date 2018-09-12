@@ -1,6 +1,6 @@
-import React from 'react';
-import { array, func } from 'prop-types';
-import Square from './square';
+import React from "react";
+import { array, func } from "prop-types";
+import Square from "./square";
 
 export default class Board extends React.Component {
   // Declare propTypes as static properties as early as possible
@@ -10,7 +10,10 @@ export default class Board extends React.Component {
   static defaultProps = { squares: Array(9).fill(null), onClick: () => {} };
 
   renderSquare = i => (
-    <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />
+    <Square
+      value={this.props.squares[i]}
+      onClick={() => this.props.onClick(i)}
+    />
   );
 
   render() {
@@ -31,11 +34,6 @@ export default class Board extends React.Component {
           {this.renderSquare(7)}
           {this.renderSquare(8)}
         </div>
-        <style jsx>{`
-          .board-row{
-            background:blue;
-          }
-        `}</style>
       </div>
     );
   }

@@ -16,7 +16,8 @@
           ]
         ]
       }
-    ]
+    ],
+    ["import", { "libraryName": "gee-ui", "style": true }]
   ],
   "env": {
     "production": {
