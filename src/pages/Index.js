@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "gee-ui";
 import logo from "assets/imgs/logo.svg";
+import { Button } from "gee-ui";
 import styles from "./Index.scss";
 
 class Index extends Component {
@@ -27,7 +27,8 @@ class Index extends Component {
           </Link>
         </div>
         <div className="components">
-          <Button kind="danger">Danger</Button>
+          <Button>Antd Button</Button>
+          <Button type="danger">Primary</Button>
         </div>
         <style jsx>{styles}</style>
       </div>
