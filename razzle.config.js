@@ -43,7 +43,8 @@ module.exports = {
             {
               loader: require.resolve("css-loader"),
               options: { importLoaders: 1 }
-            }
+            },
+            { loader: require.resolve("less-loader") }
           ]
         : IS_DEV
           ? [

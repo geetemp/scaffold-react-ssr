@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import logo from "assets/imgs/logo.svg";
-// import { Button } from "gee-ui";
+import { Button } from "gee-ui";
 import styles from "./Index.scss";
-import "./abc.less";
 
 class Index extends Component {
   render() {
@@ -27,9 +26,10 @@ class Index extends Component {
             来把XO旗！+ 子路由
           </Link>
         </div>
-        {/* <div className="components">
+        <div className="components">
           <Button>Antd Button</Button>
-        </div> */}
+          <Button type="danger">Primary</Button>
+        </div>
         <style jsx>{styles}</style>
       </div>
     );
