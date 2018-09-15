@@ -519,14 +519,6 @@ module.exports = (
         ...config.plugins,
         // Define production environment vars
         new webpack.DefinePlugin(dotenv.stringified),
-        // Extract our CSS into a files.
-        new MiniCssExtractPlugin({
-          filename: "static/css/bundle.[contenthash:8].css",
-          // allChunks: true because we want all css to be included in the main
-          // css bundle when doing code splitting to avoid FOUC:
-          // https://github.com/facebook/create-react-app/issues/2415
-          allChunks: true
-        }),
         new webpack.HashedModuleIdsPlugin(),
         new webpack.optimize.AggressiveMergingPlugin()
       ];
