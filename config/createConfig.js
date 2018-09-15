@@ -333,7 +333,8 @@ module.exports = (
           /\.(svg|png|jpg|jpeg|gif|ico)$/,
           /\.(mp4|mp3|ogg|swf|webp)$/,
           /\.(css|scss|sass|sss|less)$/,
-          /^gee-ui\/.*\/style/
+          // /^gee-ui\/.*\/style/,
+          /^gee-ui/
         ].filter(x => x)
       })
     ];
@@ -468,6 +469,14 @@ module.exports = (
         ...config.plugins,
         new webpack.HotModuleReplacementPlugin({
           multiStep: true
+        }),
+        // Extract our CSS into a files.
+        new MiniCssExtractPlugin({
+          filename: "static/css/bundle.css",
+          // allChunks: true because we want all css to be included in the main
+          // css bundle when doing code splitting to avoid FOUC:
+          // https://github.com/facebook/create-react-app/issues/2415
+          allChunks: true
         }),
         new webpack.DefinePlugin(dotenv.stringified)
       ];

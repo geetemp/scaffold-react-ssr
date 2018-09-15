@@ -1,9 +1,14 @@
 const autoprefixer = require("autoprefixer");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const fs = require("fs");
+const path = require("path");
 const paths = require("./config/paths");
 
 module.exports = {
   modify: (config, { target, dev }, webpack) => {
+    const theme = fs.existsSync("./src/theme.js")
+      ? require("./src/theme")()
+      : {};
     const IS_NODE = target === "node",
       IS_DEV = dev;
     // styled-jsx webpack plugin config
@@ -44,20 +49,31 @@ module.exports = {
               loader: require.resolve("css-loader"),
               options: { importLoaders: 1 }
             },
-            { loader: require.resolve("less-loader") }
+            {
+              loader: require.resolve("less-loader")
+            }
           ]
         : IS_DEV
           ? [
-              require.resolve("style-loader"),
+              MiniCssExtractPlugin.loader,
               {
                 loader: require.resolve("css-loader"),
-                options: { importLoaders: 1 }
+                options: {
+                  importLoaders: 1,
+                  modules: false
+                }
               },
               {
                 loader: require.resolve("postcss-loader"),
                 options: postCssOptions
               },
-              { loader: require.resolve("less-loader") }
+              {
+                loader: require.resolve("less-loader"),
+                options: {
+                  modifyVars: theme,
+                  javascriptEnabled: true
+                }
+              }
             ]
           : [
               MiniCssExtractPlugin.loader,
@@ -73,7 +89,13 @@ module.exports = {
                 loader: require.resolve("postcss-loader"),
                 options: postCssOptions
               },
-              { loader: require.resolve("less-loader") }
+              {
+                loader: require.resolve("less-loader"),
+                options: {
+                  modifyVars: theme,
+                  javascriptEnabled: true
+                }
+              }
             ]
     });
 

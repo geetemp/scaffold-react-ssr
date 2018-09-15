@@ -1,10 +1,32 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import logo from "assets/imgs/logo.svg";
-import { Button } from "gee-ui";
+import { Button, Modal } from "gee-ui";
 import styles from "./Index.scss";
 
 class Index extends Component {
+  state = { visible: false };
+
+  showModal = () => {
+    this.setState({
+      visible: true
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
   render() {
     return (
       <div className="App">
@@ -15,7 +37,6 @@ class Index extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <a className="cs">来吧</a>
         <div>
           <Link to="/tictactoe" className="go-tic">
             来把XO旗！
@@ -28,7 +49,19 @@ class Index extends Component {
         </div>
         <div className="components">
           <Button>Antd Button</Button>
-          <Button type="danger">Primary</Button>
+          <Button type="primary" onClick={this.showModal}>
+            Open Modal
+          </Button>
+          <Modal
+            title="Basic Modal"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+          >
+            <p>Some contents...</p>
+            <p>Some contents...</p>
+            <p>Some contents...</p>
+          </Modal>
         </div>
         <style jsx>{styles}</style>
       </div>

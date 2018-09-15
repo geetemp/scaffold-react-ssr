@@ -4,7 +4,6 @@
 @import "variable.scss";
 @import "icons.scss";
 
-html,
 body {
   font-family: "Microsoft Yahei", "微软雅黑", Arial, sans-serif;
   font-size: 14px;
@@ -35,11 +34,6 @@ body {
 
 .right {
   float: right;
-}
-
-a {
-  color: #333;
-  cursor: pointer;
 }
 
 .hide {
