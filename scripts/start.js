@@ -26,6 +26,8 @@ function main() {
   // FriendlyErrorsPlugin during compilation, so the user has immediate feedback.
   // clearConsole();
   logger.start("Compiling...");
+  fs.emptyDirSync(paths.appBuild);
+
   let razzle = {};
 
   // Check for razzle.config.js file
