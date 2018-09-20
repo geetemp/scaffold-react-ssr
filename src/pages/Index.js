@@ -43,7 +43,7 @@ class Index extends Component {
         </div>
         <div>
           <Link to="/tictactoe/1" className="go-tic">
-            来把XO旗！+ 子路由1122
+            来把XO旗！+ 子路由
           </Link>
         </div>
         <style jsx>{styles}</style>

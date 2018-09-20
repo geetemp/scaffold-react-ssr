@@ -8,7 +8,7 @@ import createBrowserHistory from "history/createBrowserHistory";
 const store = configureStore.createStore(window.__PRELOADED_STATE__);
 const history = new createBrowserHistory();
 
-export default function client() {
+export default function root() {
   return (
     <Provider store={store}>
       <Router history={history}>

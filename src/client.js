@@ -1,15 +1,15 @@
 import React from "react";
 import { hydrate } from "react-dom";
-import client from "./clientA";
+import root from "./root";
 
 const render = Component => {
   hydrate(<Component />, document.getElementById("root"));
 };
 
-render(client);
+render(root);
 
 if (module.hot) {
-  module.hot.accept("./clientA", () => {
-    render(require("./clientA").default);
+  module.hot.accept("./root", () => {
+    render(require("./root").default);
   });
 }
