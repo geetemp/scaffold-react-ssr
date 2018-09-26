@@ -16,6 +16,7 @@ const getClientEnv = require("./env").getClientEnv;
 const nodePath = require("./env").nodePath;
 const errorOverlayMiddleware = require("react-dev-utils/errorOverlayMiddleware");
 const WebpackBar = require("webpackbar");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const postCssOptions = {
   ident: "postcss", // https://webpack.js.org/guides/migrating/#complex-options
@@ -397,6 +398,11 @@ module.exports = (
       new AssetsPlugin({
         path: paths.appBuild,
         filename: "assets.json"
+      }),
+      new HtmlWebpackPlugin({
+        inject: true,
+        filename: "index.html",
+        template: paths.appHtml
       })
       // Maybe we should move to this???
       // new ManifestPlugin({

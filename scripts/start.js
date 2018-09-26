@@ -47,22 +47,22 @@ function main() {
   // Create dev configs using our config factory, passing in razzle file as
   // options.
   let clientConfig = createConfig("web", "dev", razzle, webpack);
-  let serverConfig = createConfig("node", "dev", razzle, webpack);
+  // let serverConfig = createConfig("node", "dev", razzle, webpack);
 
   // Compile our assets with webpack
   const clientCompiler = compile(clientConfig);
-  const serverCompiler = compile(serverConfig);
+  // const serverCompiler = compile(serverConfig);
 
   // Start our server webpack instance in watch mode after assets compile
   clientCompiler.plugin("done", () => {
-    serverCompiler.watch(
-      {
-        quiet: true,
-        stats: "none"
-      },
-      /* eslint-disable no-unused-vars */
-      stats => {}
-    );
+    // serverCompiler.watch(
+    //   {
+    //     quiet: true,
+    //     stats: "none"
+    //   },
+    //   /* eslint-disable no-unused-vars */
+    //   stats => {}
+    // );
   });
 
   // Create a new instance of Webpack-dev-server for our client assets.
