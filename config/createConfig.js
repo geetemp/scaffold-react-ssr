@@ -473,9 +473,7 @@ module.exports = (
       // Add client-only development plugins
       config.plugins = [
         ...config.plugins,
-        new webpack.HotModuleReplacementPlugin({
-          multiStep: true
-        }),
+        new webpack.HotModuleReplacementPlugin(),
         // Extract our CSS into a files.
         new MiniCssExtractPlugin({
           filename: "static/css/bundle.css",

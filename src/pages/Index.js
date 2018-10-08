@@ -38,7 +38,7 @@ class Index extends Component {
         </p>
         <div>
           <Link to="/tictactoe" className="go-tic">
-            来把XO旗！1212
+            来把XO旗！
           </Link>
         </div>
         <div>
