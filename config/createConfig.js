@@ -474,14 +474,6 @@ module.exports = (
       config.plugins = [
         ...config.plugins,
         new webpack.HotModuleReplacementPlugin(),
-        // Extract our CSS into a files.
-        new MiniCssExtractPlugin({
-          filename: "static/css/bundle.css",
-          // allChunks: true because we want all css to be included in the main
-          // css bundle when doing code splitting to avoid FOUC:
-          // https://github.com/facebook/create-react-app/issues/2415
-          allChunks: true
-        }),
         new webpack.DefinePlugin(dotenv.stringified)
       ];
 
@@ -521,6 +513,14 @@ module.exports = (
 
       config.plugins = [
         ...config.plugins,
+        // Extract our CSS into a files.
+        new MiniCssExtractPlugin({
+          filename: "static/css/bundle.css",
+          // allChunks: true because we want all css to be included in the main
+          // css bundle when doing code splitting to avoid FOUC:
+          // https://github.com/facebook/create-react-app/issues/2415
+          allChunks: true
+        }),
         // Define production environment vars
         new webpack.DefinePlugin(dotenv.stringified),
         new webpack.HashedModuleIdsPlugin(),

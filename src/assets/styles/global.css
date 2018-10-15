@@ -1,8 +1,4 @@
-/* @styled-jsx=global */
-
-@import "normalize.scss";
-@import "variable.scss";
-@import "icons.scss";
+@import "normalize.css";
 
 body {
   font-family: "Microsoft Yahei", "微软雅黑", Arial, sans-serif;

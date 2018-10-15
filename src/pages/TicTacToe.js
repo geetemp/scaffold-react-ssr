@@ -3,7 +3,7 @@ import Board from "components/board";
 import { renderRoutes } from "react-router-config";
 import { connect } from "react-redux";
 import ticTacToeModel from "store/reducers/ticTacToe";
-import styles from "./TicTacToe.scss";
+import "./TicTacToe.css";
 
 @connect(
   ({ TicTacToe }) => {
@@ -65,7 +65,6 @@ export default class TicTacToe extends Component {
           <ol>{moves}</ol>
         </div>
         <div>{renderRoutes(route.routes)}</div>
-        <style jsx>{styles}</style>
       </div>
     );
   }

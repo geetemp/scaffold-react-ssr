@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import logo from "assets/imgs/logo.svg";
-import styles from "./Index.scss";
+import "./Index.css";
 
 class Index extends Component {
   state = { visible: false };
@@ -46,7 +46,6 @@ class Index extends Component {
             来把XO旗！+ 子路由
           </Link>
         </div>
-        <style jsx>{styles}</style>
       </div>
     );
   }

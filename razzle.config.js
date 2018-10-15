@@ -1,7 +1,6 @@
 const autoprefixer = require("autoprefixer");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const fs = require("fs");
-const path = require("path");
 const paths = require("./config/paths");
 
 module.exports = {
@@ -26,18 +25,18 @@ module.exports = {
         })
       ]
     };
-    const scssRule = config.module.rules.filter(rule => {
-      return (rule.test || {}).toString() == /\.scss$/;
-    })[0];
-    scssRule.use = [
-      {
-        loader: require.resolve("babel-loader")
-      },
-      {
-        loader: require("styled-jsx/webpack").loader,
-        options: { type: "scoped" }
-      }
-    ];
+    // const scssRule = config.module.rules.filter(rule => {
+    //   return (rule.test || {}).toString() == /\.scss$/;
+    // })[0];
+    // scssRule.use = [
+    //   {
+    //     loader: require.resolve("babel-loader")
+    //   },
+    //   {
+    //     loader: require("styled-jsx/webpack").loader,
+    //     options: { type: "scoped" }
+    //   }
+    // ];
 
     config.module.rules.push({
       test: /\.less$/,
