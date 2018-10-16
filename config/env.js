@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
-const paths = require('./paths');
-const fs = require('fs');
-const path = require('path');
+const paths = require("./paths");
+const fs = require("fs");
+const path = require("path");
 
 // Make sure that including paths.js after env.js will read .env variables.
-delete require.cache[require.resolve('./paths')];
+delete require.cache[require.resolve("./paths")];
 
 const NODE_ENV = process.env.NODE_ENV;
 if (!NODE_ENV) {
   throw new Error(
-    'The NODE_ENV environment variable is required but was not specified.'
+    "The NODE_ENV environment variable is required but was not specified."
   );
 }
 
@@ -19,7 +19,7 @@ var dotenvFiles = [
   `${paths.dotenv}.${NODE_ENV}.local`,
   `${paths.dotenv}.${NODE_ENV}`,
   `${paths.dotenv}.local`,
-  paths.dotenv,
+  paths.dotenv
 ];
 // Load environment variables from .env* files. Suppress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
@@ -27,8 +27,8 @@ var dotenvFiles = [
 // https://github.com/motdotla/dotenv
 dotenvFiles.forEach(dotenvFile => {
   if (fs.existsSync(dotenvFile)) {
-    require('dotenv').config({
-      path: dotenvFile,
+    require("dotenv").config({
+      path: dotenvFile
     });
   }
 });
@@ -43,7 +43,7 @@ dotenvFiles.forEach(dotenvFile => {
 // https://github.com/facebookincubator/create-react-app/issues/1023#issuecomment-265344421
 // We also resolve them to make sure all tools using them work consistently.
 const appDirectory = fs.realpathSync(process.cwd());
-const nodePath = (process.env.NODE_PATH || '')
+const nodePath = (process.env.NODE_PATH || "")
   .split(path.delimiter)
   .filter(folder => folder && !path.isAbsolute(folder))
   .map(folder => path.resolve(appDirectory, folder))
@@ -53,7 +53,21 @@ const nodePath = (process.env.NODE_PATH || '')
 // injected into the application via DefinePlugin in Webpack configuration.
 const RAZZLE = /^RAZZLE_/i;
 
-function getClientEnvironment(target, options) {
+function getClientEnvironment(target, env, options) {
+  const host = process.env.HOST || options.host || "localhost";
+  //server port
+  const port = process.env.PORT || options.port || 3000;
+  //client port
+  const devServerPort = parseInt(port, 10) + 1;
+  const publicPath =
+    env === "dev"
+      ? `http://${host}:${devServerPort}/`
+      : process.env.PUBLIC_PATH || "/";
+  // Useful for resolving the correct path to static assets in `public`.
+  // For example, <img src={process.env.PUBLIC_URL + '/img/logo.png'} />.
+  // This should only be used as an escape hatch. Normally you would put
+  // images into the `src` and `import` them in code to get their paths.
+  const publicUrl = publicPath.slice(0, -1);
   const raw = Object.keys(process.env)
     .filter(key => RAZZLE.test(key))
     .reduce(
@@ -64,20 +78,22 @@ function getClientEnvironment(target, options) {
       {
         // Useful for determining whether we’re running in production mode.
         // Most importantly, it switches React into the correct mode.
-        NODE_ENV: process.env.NODE_ENV || 'development',
-        PORT: process.env.PORT || options.port || 3000,
+        NODE_ENV: process.env.NODE_ENV || "development",
+        PORT: port,
+        DEV_SERVER_PORT: devServerPort,
         VERBOSE: !!process.env.VERBOSE,
-        HOST: process.env.HOST || options.host || 'localhost',
+        HOST: host,
         RAZZLE_ASSETS_MANIFEST: paths.appManifest,
-        BUILD_TARGET: target === 'web' ? 'client' : 'server',
+        BUILD_TARGET: target === "web" ? "client" : "server",
         // only for production builds. Useful if you need to serve from a CDN
-        PUBLIC_PATH: process.env.PUBLIC_PATH || '/',
+        PUBLIC_PATH: publicPath,
+        PUBLIC_URL: publicUrl,
         // The public dir changes between dev and prod, so we use an environment
         // variable available to users.
         RAZZLE_PUBLIC_DIR:
-          process.env.NODE_ENV === 'production'
+          process.env.NODE_ENV === "production"
             ? paths.appBuildPublic
-            : paths.appPublic,
+            : paths.appPublic
       }
     );
   // Stringify all values so we can feed into Webpack DefinePlugin
@@ -91,5 +107,5 @@ function getClientEnvironment(target, options) {
 
 module.exports = {
   getClientEnv: getClientEnvironment,
-  nodePath: nodePath,
+  nodePath: nodePath
 };

@@ -8,6 +8,7 @@ const nodeExternals = require("webpack-node-externals");
 const AssetsPlugin = require("assets-webpack-plugin");
 const StartServerPlugin = require("start-server-webpack-plugin");
 const eslintFormatter = require("react-dev-utils/eslintFormatter");
+const InterpolateHtmlPlugin = require("react-dev-utils/InterpolateHtmlPlugin"); //在html中插入值
 const autoprefixer = require("autoprefixer");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const paths = require("./paths");
@@ -95,9 +96,8 @@ module.exports = (
   const IS_DEV = env === "dev";
   process.env.NODE_ENV = IS_PROD ? "production" : "development";
 
-  const dotenv = getClientEnv(target, { clearConsole, host, port });
+  const dotenv = getClientEnv(target, env, { clearConsole, host, port });
 
-  const devServerPort = parseInt(dotenv.raw.PORT, 10) + 1;
   // This is our base webpack config.
   let config = {
     // Set webpack mode:
@@ -343,7 +343,7 @@ module.exports = (
     // Specify webpack Node.js output path and filename
     config.output = {
       path: paths.appBuild,
-      publicPath: IS_DEV ? `http://${dotenv.raw.HOST}:${devServerPort}/` : "/",
+      publicPath: dotenv.raw.PUBLIC_PATH,
       filename: "server.js",
       libraryTarget: "commonjs2"
     };
@@ -403,14 +403,18 @@ module.exports = (
         inject: true,
         filename: "index.html",
         template: paths.appHtml
-      })
-      // Maybe we should move to this???
-      // new ManifestPlugin({
-      //   path: paths.appBuild,
-      //   writeToFileEmit: true,
-      //   filename: 'manifest.json',
-      // }),
+      }),
+      // The public URL is available as %PUBLIC_URL% in index.html, e.g.: // Makes some environment variables available in index.html.
+      // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+      // In development, this will be an empty string.
+      new InterpolateHtmlPlugin(HtmlWebpackPlugin, dotenv.raw)
     ];
+    // Maybe we should move to this???
+    // new ManifestPlugin({
+    //   path: paths.appBuild,
+    //   writeToFileEmit: true,
+    //   filename: 'manifest.json',
+    // }),
 
     if (IS_DEV) {
       // Setup Webpack Dev Server on port 3001 and
@@ -429,7 +433,7 @@ module.exports = (
       // Configure our client bundles output. Not the public path is to 3001.
       config.output = {
         path: paths.appBuildPublic,
-        publicPath: `http://${dotenv.raw.HOST}:${devServerPort}/`,
+        publicPath: dotenv.raw.PUBLIC_PATH,
         pathinfo: true,
         libraryTarget: "var",
         filename: "static/js/bundle.js",
@@ -442,14 +446,10 @@ module.exports = (
       config.devServer = {
         disableHostCheck: true,
         clientLogLevel: "none",
-        // Enable gzip compression of generated files.
         compress: true,
-        // watchContentBase: true,
-        headers: {
-          "Access-Control-Allow-Origin": "*"
-        },
+        headers: { "Access-Control-Allow-Origin": "*" },
         historyApiFallback: {
-          // Paths with dots should still use the history fallback.
+          // Paths with dots should still use the history fallback. // Enable gzip compression of generated files.
           // See https://github.com/facebookincubator/create-react-app/issues/387.
           disableDotRule: true
         },
@@ -457,18 +457,16 @@ module.exports = (
         hot: true,
         noInfo: true,
         overlay: false,
-        port: devServerPort,
-        quiet: true,
-        // By default files from `contentBase` will not trigger a page reload.
-        // Reportedly, this avoids CPU overload on some systems.
-        // https://github.com/facebookincubator/create-react-app/issues/293
-        watchOptions: {
-          ignored: /node_modules/
-        },
+        port: dotenv.raw.DEV_SERVER_PORT,
+        quiet: true, // https://github.com/facebookincubator/create-react-app/issues/293 // Reportedly, this avoids CPU overload on some systems. // By default files from `contentBase` will not trigger a page reload.
+        watchOptions: { ignored: /node_modules/ },
         before(app) {
           // This lets us open files from the runtime error overlay.
           app.use(errorOverlayMiddleware());
-        }
+        },
+        contentBase: paths.appPublic,
+        watchContentBase: true,
+        proxy: require(paths.appPackageJson).proxy
       };
       // Add client-only development plugins
       config.plugins = [
@@ -505,7 +503,7 @@ module.exports = (
       // we will only be using one port in production.
       config.output = {
         path: paths.appBuildPublic,
-        publicPath: dotenv.raw.PUBLIC_PATH || "/",
+        publicPath: dotenv.raw.PUBLIC_PATH,
         filename: "static/js/bundle.[chunkhash:8].js",
         chunkFilename: "static/js/[name].[chunkhash:8].chunk.js",
         libraryTarget: "var"
