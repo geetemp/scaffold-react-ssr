@@ -6466,7 +6466,7 @@ react-dev-utils@4.1.0:
     strip-ansi "3.0.1"
     text-table "0.2.0"
 
-react-dev-utils@^6.0.5:
+react-dev-utils@6.0.5:
   version "6.0.5"
   resolved "http://registry.npm.taobao.org/react-dev-utils/download/react-dev-utils-6.0.5.tgz#6ef34d0a416dc1c97ac20025031ea1f0d819b21d"
   dependencies:

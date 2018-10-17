@@ -385,5 +385,13 @@ module.exports = () => {
 - react
 - react-router
 - redux
-- styled-jsx
 - fetch
+
+### 更新
+
+version 0.1.1
+
+1. polyfills, 增加 babel-polyfill 和 raf,来支持 ie9;
+2. 删除 style-jsx, 不提供 css 方案，各项目自主选用合适的 css 方案；
+3. public 目录静态资源访问支持；
+4. proxy 接口代理支持；
