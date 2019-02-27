@@ -1,9 +1,9 @@
-import Model from "../Model";
+import Model from "../model";
 
 export default Model.getInstance(
   class extends Model {
     namespace = "TicTacToe";
-    
+
     state = {
       history: [
         {
@@ -12,7 +12,7 @@ export default Model.getInstance(
       ],
       stepNumber: 0,
       xIsNext: true,
-      historySelectText: "",
+      historySelectText: ""
     };
 
     actions = {

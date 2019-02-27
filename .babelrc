@@ -1,24 +1,6 @@
 {
   "presets": ["react-app"],
-  "plugins": [
-    "transform-decorators-legacy",
-    [
-      "styled-jsx/babel",
-      {
-        "plugins": [
-          [
-            "styled-jsx-plugin-sass",
-            {
-              "sassOptions": {
-                "includePaths": ["./src/assets/styles"]
-              }
-            }
-          ]
-        ]
-      }
-    ],
-    ["import", { "libraryName": "gee-ui", "style": true }]
-  ],
+  "plugins": ["transform-decorators-legacy"],
   "env": {
     "production": {
       "plugins": ["transform-remove-console"]

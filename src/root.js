@@ -6,7 +6,7 @@ import { RouteDataLoader } from "utils/hoc/route-data-loader";
 import createBrowserHistory from "history/createBrowserHistory";
 
 const store = configureStore.createStore(window.__PRELOADED_STATE__);
-const history = new createBrowserHistory();
+export const history = new createBrowserHistory();
 
 export default function root() {
   return (

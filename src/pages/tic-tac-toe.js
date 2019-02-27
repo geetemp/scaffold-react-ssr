@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import Board from "components/board";
 import { renderRoutes } from "react-router-config";
 import { connect } from "react-redux";
-import ticTacToeModel from "store/reducers/ticTacToe";
-import styles from "./TicTacToe.scss";
+import ticTacToeModel from "store/reducers/tic-tac-toe";
+import styles from "./tic-tac-toe.scss";
 
 @connect(
   ({ TicTacToe }) => {
@@ -19,8 +19,6 @@ export default class TicTacToe extends Component {
   static async getInitialProps({ pathname, query, req, res }) {
     return { history: [{ squares: Array(9).fill("X", 7, 9) }] };
   }
-
-  // componentDidMount() {}
 
   render() {
     const {
@@ -65,7 +63,6 @@ export default class TicTacToe extends Component {
           <ol>{moves}</ol>
         </div>
         <div>{renderRoutes(route.routes)}</div>
-        <style jsx>{styles}</style>
       </div>
     );
   }

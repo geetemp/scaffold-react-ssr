@@ -193,75 +193,34 @@ module.exports = (
                 }
               ]
             : IS_DEV
-              ? [
-                  require.resolve("style-loader"),
-                  {
-                    loader: require.resolve("css-loader"),
-                    options: { importLoaders: 1 }
-                  },
-                  {
-                    loader: require.resolve("postcss-loader"),
-                    options: postCssOptions
-                  }
-                ]
-              : [
-                  MiniCssExtractPlugin.loader,
-                  {
-                    loader: require.resolve("css-loader"),
-                    options: {
-                      importLoaders: 1,
-                      modules: false,
-                      minimize: true
-                    }
-                  },
-                  {
-                    loader: require.resolve("postcss-loader"),
-                    options: postCssOptions
-                  }
-                ]
-        },
-        {
-          test: /\.scss$/,
-          exclude: [paths.appBuild],
-          use: IS_NODE // Style-loader does not work in Node.js without some crazy
-            ? // magic. Luckily we just need css-loader.
-              [
+            ? [
+                require.resolve("style-loader"),
                 {
                   loader: require.resolve("css-loader"),
                   options: { importLoaders: 1 }
                 },
-                { loader: require.resolve("sass-loader") }
+                {
+                  loader: require.resolve("postcss-loader"),
+                  options: postCssOptions
+                }
               ]
-            : IS_DEV
-              ? [
-                  require.resolve("style-loader"),
-                  {
-                    loader: require.resolve("css-loader"),
-                    options: { importLoaders: 1 }
-                  },
-                  {
-                    loader: require.resolve("postcss-loader"),
-                    options: postCssOptions
-                  },
-                  { loader: require.resolve("sass-loader") }
-                ]
-              : [
-                  MiniCssExtractPlugin.loader,
-                  {
-                    loader: require.resolve("css-loader"),
-                    options: {
-                      importLoaders: 1,
-                      modules: false,
-                      minimize: true
-                    }
-                  },
-                  {
-                    loader: require.resolve("postcss-loader"),
-                    options: postCssOptions
-                  },
-                  { loader: require.resolve("sass-loader") }
-                ]
-        }, // Adds support for CSS Modules (https://github.com/css-modules/css-modules)
+            : [
+                MiniCssExtractPlugin.loader,
+                {
+                  loader: require.resolve("css-loader"),
+                  options: {
+                    importLoaders: 1,
+                    modules: false,
+                    minimize: true
+                  }
+                },
+                {
+                  loader: require.resolve("postcss-loader"),
+                  options: postCssOptions
+                }
+              ]
+        },
+        // Adds support for CSS Modules (https://github.com/css-modules/css-modules)
         // using the extension .module.css
         {
           test: /\.module\.css$/,
@@ -280,37 +239,37 @@ module.exports = (
                 }
               ]
             : IS_DEV
-              ? [
-                  require.resolve("style-loader"),
-                  {
-                    loader: require.resolve("css-loader"),
-                    options: {
-                      modules: true,
-                      importLoaders: 1,
-                      localIdentName: "[path]__[name]___[local]"
-                    }
-                  },
-                  {
-                    loader: require.resolve("postcss-loader"),
-                    options: postCssOptions
+            ? [
+                require.resolve("style-loader"),
+                {
+                  loader: require.resolve("css-loader"),
+                  options: {
+                    modules: true,
+                    importLoaders: 1,
+                    localIdentName: "[path]__[name]___[local]"
                   }
-                ]
-              : [
-                  MiniCssExtractPlugin.loader,
-                  {
-                    loader: require.resolve("css-loader"),
-                    options: {
-                      modules: true,
-                      importLoaders: 1,
-                      minimize: true,
-                      localIdentName: "[path]__[name]___[local]"
-                    }
-                  },
-                  {
-                    loader: require.resolve("postcss-loader"),
-                    options: postCssOptions
+                },
+                {
+                  loader: require.resolve("postcss-loader"),
+                  options: postCssOptions
+                }
+              ]
+            : [
+                MiniCssExtractPlugin.loader,
+                {
+                  loader: require.resolve("css-loader"),
+                  options: {
+                    modules: true,
+                    importLoaders: 1,
+                    minimize: true,
+                    localIdentName: "[path]__[name]___[local]"
                   }
-                ]
+                },
+                {
+                  loader: require.resolve("postcss-loader"),
+                  options: postCssOptions
+                }
+              ]
         }
       ]
     }
@@ -334,7 +293,8 @@ module.exports = (
           /\.(mp4|mp3|ogg|swf|webp)$/,
           /\.(css|scss|sass|sss|less)$/,
           // /^gee-ui\/.*\/style/,
-          /^gee-ui/
+          /^gee-ui/,
+          /^antd/
         ].filter(x => x)
       })
     ];
@@ -356,7 +316,7 @@ module.exports = (
       })
     ];
 
-    config.entry = [paths.appServerIndexJs];
+    config.entry = [require.resolve("./polyfills"), paths.appServerIndexJs];
 
     if (IS_DEV) {
       // Use watch mode
@@ -394,17 +354,26 @@ module.exports = (
     config.plugins = [
       // Output our JS and CSS files in a manifest file called assets.json
       // in the build directory.
+      // Extract our CSS into a files.
+      new MiniCssExtractPlugin({
+        filename: "static/css/bundle.[contenthash:8].css",
+        chunkFilename: "static/css/[name].[contenthash:8].chunk.css",
+        // allChunks: true because we want all css to be included in the main
+        // css bundle when doing code splitting to avoid FOUC:
+        // https://github.com/facebook/create-react-app/issues/2415
+        allChunks: true
+      }),
       new AssetsPlugin({
         path: paths.appBuild,
         filename: "assets.json"
       })
-      // Maybe we should move to this???
-      // new ManifestPlugin({
-      //   path: paths.appBuild,
-      //   writeToFileEmit: true,
-      //   filename: 'manifest.json',
-      // }),
     ];
+    // Maybe we should move to this???
+    // new ManifestPlugin({
+    //   path: paths.appBuild,
+    //   writeToFileEmit: true,
+    //   filename: 'manifest.json',
+    // }),
 
     if (IS_DEV) {
       // Setup Webpack Dev Server on port 3001 and
@@ -414,7 +383,7 @@ module.exports = (
           // We ship a few polyfills by default but only include them if React is being placed in
           // the default path. If you are doing some vendor bundling, you'll need to require the razzle/polyfills
           // on your own.
-          !dotenv.raw.REACT_BUNDLE_PATH && require.resolve("./polyfills"),
+          require.resolve("./polyfills"),
           require.resolve("razzle-dev-utils/webpackHotDevClient"),
           paths.appClientIndexJs
         ].filter(Boolean)
@@ -448,6 +417,7 @@ module.exports = (
           disableDotRule: true
         },
         host: dotenv.raw.HOST,
+        allowedHosts: ["front.geetemp.com"],
         hot: true,
         noInfo: true,
         overlay: false,
@@ -470,14 +440,6 @@ module.exports = (
         new webpack.HotModuleReplacementPlugin({
           multiStep: true
         }),
-        // Extract our CSS into a files.
-        new MiniCssExtractPlugin({
-          filename: "static/css/bundle.css",
-          // allChunks: true because we want all css to be included in the main
-          // css bundle when doing code splitting to avoid FOUC:
-          // https://github.com/facebook/create-react-app/issues/2415
-          allChunks: true
-        }),
         new webpack.DefinePlugin(dotenv.stringified)
       ];
 
@@ -499,7 +461,7 @@ module.exports = (
           // We ship a few polyfills by default but only include them if React is being placed in
           // the default path. If you are doing some vendor bundling, you'll need to require the razzle/polyfills
           // on your own.
-          !dotenv.raw.REACT_BUNDLE_PATH && require.resolve("./polyfills"),
+          require.resolve("./polyfills"),
           paths.appClientIndexJs
         ].filter(Boolean)
       };

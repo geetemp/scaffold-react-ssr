@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Button,TimePicker } from "gee-ui";
 import logo from "assets/imgs/logo.svg";
-import styles from "./Index.scss";
+import "./index.scss";
 
 class Index extends Component {
   state = { visible: false };
@@ -46,10 +45,7 @@ class Index extends Component {
           <Link to="/tictactoe/1" className="go-tic">
             来把XO旗！+ 子路由
           </Link>
-          <Button>abc</Button>
-          <TimePicker></TimePicker>
         </div>
-        <style jsx>{styles}</style>
       </div>
     );
   }
